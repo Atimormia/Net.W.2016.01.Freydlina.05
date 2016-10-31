@@ -23,8 +23,8 @@ namespace Task2
             {
                 for (int j = i + 1; j < arr.Length; j++)
                 {
-                    if (parameter(arr[i]) <= parameter(arr[j]) && !ascending) continue;
-                    if (parameter(arr[i]) >= parameter(arr[j]) && ascending) continue;
+                    if (parameter(arr[i]) <= parameter(arr[j]) && ascending) continue;
+                    if (parameter(arr[i]) >= parameter(arr[j]) && !ascending) continue;
                     var temp = arr[i];
                     arr[i] = arr[j];
                     arr[j] = temp;
