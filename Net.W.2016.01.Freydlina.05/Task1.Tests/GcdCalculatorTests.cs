@@ -9,7 +9,50 @@ namespace Task1.Tests
     [TestFixture]
     public class GcdCalculatorTests
     {
+        #region Test method: public static int Gcd(GcdAlgorithm algorithm, params int[] values)
 
+        public static IEnumerable<TestCaseData> TestCasesForGcdParams
+        {
+            get
+            {
+                GcdAlgorithm[] algorithms = new GcdAlgorithm[2];
+                algorithms[0] = GcdCalculator.GcdEuclid;
+                algorithms[1] = GcdCalculator.GcdStein;
+                foreach (GcdAlgorithm algorithm in algorithms)
+                {
+                    yield return new TestCaseData(algorithm, new int[] { 18, 48 }).Returns(6);
+                    yield return new TestCaseData(algorithm, new int[] { 18, 48, 6 }).Returns(6);
+                    yield return new TestCaseData(algorithm, new int[] { 18, 48, 6, 1 }).Returns(1);
+                    yield return new TestCaseData(algorithm, new int[] { 18, 48, 6, 0, 1 }).Returns(1);
+                    yield return new TestCaseData(algorithm, new int[] { 0, 18, 48, 6 }).Returns(6);
+                    yield return new TestCaseData(algorithm, new int[] { -18, 48, -6 }).Returns(6);
+                }
+            }
+        }
+
+        [Test, TestCaseSource(nameof(TestCasesForGcdParams))]
+        public int TestGcdParams(GcdAlgorithm algorithm, int[] values)
+        {
+            return GcdCalculator.Gcd(algorithm, values);
+
+        }
+
+        public static IEnumerable<TestCaseData> TestCasesForGcdParamsThrows
+        {
+            get
+            {
+                yield return new TestCaseData(null, new int[] { 18, -48, 6 });
+            }
+        }
+
+        [Test, TestCaseSource(nameof(TestCasesForGcdParamsThrows))]
+        public void TestGcdParamsThrows(GcdAlgorithm algorithm, int[] values)
+        {
+            Assert.That(() => GcdCalculator.Gcd(algorithm, values), Throws.TypeOf<ArgumentNullException>());
+
+        }
+        #endregion
+        
         #region Test method: public static int GcdEuclid(int a, int b)
         public static IEnumerable<TestCaseData> TestCasesForGcdEuclid
         {
@@ -18,68 +61,16 @@ namespace Task1.Tests
                 yield return new TestCaseData(18, 48).Returns(6);
                 yield return new TestCaseData(18, 18).Returns(18);
                 yield return new TestCaseData(1, 0).Returns(1);
-                yield return new TestCaseData(0,1).Returns(1);
+                yield return new TestCaseData(0, 1).Returns(1);
+                yield return new TestCaseData(-18, 48).Returns(6);
+                yield return new TestCaseData(18, -48).Returns(6);
             }
         }
 
         [Test, TestCaseSource(nameof(TestCasesForGcdEuclid))]
         public int TestGcdEuclid(int a, int b)
         {
-            Debug.WriteLine($"Euclid with {a} and {b} calculates {GcdCalculator.TimeForCalculationEuclidGcd(a,b)}");
             return GcdCalculator.GcdEuclid(a, b);
-
-        }
-
-        public static IEnumerable<TestCaseData> TestCasesForGcdEuclidThrows
-        {
-            get
-            {
-                yield return new TestCaseData(-18, 48);
-                yield return new TestCaseData(18, -48);
-            }
-        }
-
-        [Test, TestCaseSource(nameof(TestCasesForGcdEuclidThrows))]
-        public void TestGcdEuclidThrows(int a, int b)
-        {
-            Assert.That(() => GcdCalculator.GcdEuclid(a, b), Throws.TypeOf<ArgumentException>());
-
-        }
-        #endregion
-
-        #region Test method: public static int GcdEuclid(params int[] values)
-        public static IEnumerable<TestCaseData> TestCasesForGcdEuclidParams
-        {
-            get
-            {
-                yield return new TestCaseData(new int[] { 18, 48 }).Returns(6);
-                yield return new TestCaseData(new int[] { 18, 48, 6 }).Returns(6);
-                yield return new TestCaseData(new int[] { 18, 48, 6, 1 }).Returns(1);
-                yield return new TestCaseData(new int[] { 18, 48, 6, 0, 1 }).Returns(1);
-                yield return new TestCaseData(new int[] { 0, 18, 48, 6 }).Returns(6);
-            }
-        }
-
-        [Test, TestCaseSource(nameof(TestCasesForGcdEuclidParams))]
-        public int TestGcdEuclidParams(int[] values)
-        {
-            return GcdCalculator.GcdEuclid(values);
-
-        }
-
-        public static IEnumerable<TestCaseData> TestCasesForGcdEuclidParamsThrows
-        {
-            get
-            {
-                yield return new TestCaseData(new int[] { 18, -48, 6 });
-                yield return new TestCaseData(new int[] { 18, 48, 6, 0, -1 });
-            }
-        }
-
-        [Test, TestCaseSource(nameof(TestCasesForGcdEuclidParamsThrows))]
-        public void TestGcdEuclidParamsThrows(int[] values)
-        {
-            Assert.That(() => GcdCalculator.GcdEuclid(values), Throws.TypeOf<ArgumentException>());
 
         }
         #endregion
@@ -93,67 +84,60 @@ namespace Task1.Tests
                 yield return new TestCaseData(18, 18).Returns(18);
                 yield return new TestCaseData(1, 0).Returns(1);
                 yield return new TestCaseData(0, 1).Returns(1);
+                yield return new TestCaseData(-18, 48).Returns(6);
+                yield return new TestCaseData(18, -48).Returns(6);
             }
         }
 
         [Test, TestCaseSource(nameof(TestCasesForGcdStein))]
         public int TestGcdStein(int a, int b)
         {
-            Debug.WriteLine($"Stein with {a} and {b} calculates {GcdCalculator.TimeForCalculationSteinGcd(a, b)}");
             return GcdCalculator.GcdStein(a, b);
-
-        }
-
-        public static IEnumerable<TestCaseData> TestCasesForGcdSteinThrows
-        {
-            get
-            {
-                yield return new TestCaseData(-18, 48);
-                yield return new TestCaseData(18, -48);
-            }
-        }
-
-        [Test, TestCaseSource(nameof(TestCasesForGcdSteinThrows))]
-        public void TestGcdSteinThrows(int a, int b)
-        {
-            Assert.That(() => GcdCalculator.GcdStein(a, b), Throws.TypeOf<ArgumentException>());
 
         }
         #endregion
 
-        #region Test method: public static int GcdStein(params int[] values)
-        public static IEnumerable<TestCaseData> TestCasesForGcdSteinParams
+        #region Test method: public static ReturnGcdAndCalutationTime GcdWithTimeCalculation(GcdAlgorithm algorithm, int a, int b)
+        public static IEnumerable<TestCaseData> TestCasesForGcdWithTime
         {
             get
             {
-                yield return new TestCaseData(new int[] { 18, 48 }).Returns(6);
-                yield return new TestCaseData(new int[] { 18, 48, 6 }).Returns(6);
-                yield return new TestCaseData(new int[] { 18, 48, 6, 1 }).Returns(1);
-                yield return new TestCaseData(new int[] { 18, 48, 6, 0, 1 }).Returns(1);
-                yield return new TestCaseData(new int[] { 0, 18, 48, 6 }).Returns(6);
+                GcdAlgorithm[] algorithms = new GcdAlgorithm[2];
+                algorithms[0] = GcdCalculator.GcdEuclid;
+                algorithms[1] = GcdCalculator.GcdStein;
+                foreach (GcdAlgorithm algorithm in algorithms)
+                {
+                    yield return new TestCaseData(algorithm, 18, 48).Returns(6);
+                    yield return new TestCaseData(algorithm, 18, 18).Returns(18);
+                    yield return new TestCaseData(algorithm, 1, 0).Returns(1);
+                    yield return new TestCaseData(algorithm, 0, 1).Returns(1);
+                    yield return new TestCaseData(algorithm, -18, 48).Returns(6);
+                    yield return new TestCaseData(algorithm, 18, -48).Returns(6);
+                }
             }
         }
 
-        [Test, TestCaseSource(nameof(TestCasesForGcdSteinParams))]
-        public int TestGcdSteinParams(int[] values)
+        [Test, TestCaseSource(nameof(TestCasesForGcdWithTime))]
+        public int TestGcdWithTime(GcdAlgorithm algorithm, int a, int b)
         {
-            return GcdCalculator.GcdStein(values);
+            ReturnGcdAndCalutationTime result = GcdCalculator.GcdWithTimeCalculation(algorithm, a, b);
+            Debug.WriteLine($"Algorithm {algorithm.Method.Name} with parameters {a} and {b} calculates during {result.Time.Ticks} ticks");
+            return result.Gcd;
 
         }
 
-        public static IEnumerable<TestCaseData> TestCasesForGcdSteinParamsThrows
+        public static IEnumerable<TestCaseData> TestCasesForGcdWithTimeThrows
         {
             get
             {
-                yield return new TestCaseData(new int[] { 18, -48, 6 });
-                yield return new TestCaseData(new int[] { 18, 48, 6, 0, -1 });
+                yield return new TestCaseData(null, 1, 48);
             }
         }
 
-        [Test, TestCaseSource(nameof(TestCasesForGcdSteinParamsThrows))]
-        public void TestGcdSteinParamsThrows(int[] values)
+        [Test, TestCaseSource(nameof(TestCasesForGcdWithTimeThrows))]
+        public void TestGcdWithTimeThrows(GcdAlgorithm algorithm, int a, int b)
         {
-            Assert.That(() => GcdCalculator.GcdStein(values), Throws.TypeOf<ArgumentException>());
+            Assert.That(() => GcdCalculator.GcdWithTimeCalculation(algorithm, a, b), Throws.TypeOf<ArgumentNullException>());
 
         }
         #endregion
