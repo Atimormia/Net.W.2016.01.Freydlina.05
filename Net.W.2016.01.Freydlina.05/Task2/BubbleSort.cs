@@ -1,51 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Task2
+namespace Task1
 {
     public class BubbleSort
     {
-        public static void SortJuggedArray(int[][] arr, Func<int[], int> parameter, bool ascending = true)
+        /// <summary>
+        /// Sorts jugged array by Bubble Algorithm with come comparator
+        /// </summary>
+        /// <param name="arr">jugged array</param>
+        /// <param name="comparator">implements comparation way</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void SortJuggedArray(int[][] arr, ICustomComparator comparator)
         {
             if (arr == null)
             {
                 throw new ArgumentNullException(nameof(arr));
             }
-            if (parameter == null)
+            if (comparator == null)
             {
-                throw new ArgumentNullException(nameof(parameter));
+                throw new ArgumentNullException(nameof(comparator));
             }
 
             for (int i = 0; i < arr.Length - 1; i++)
             {
                 for (int j = i + 1; j < arr.Length; j++)
                 {
-                    if (parameter(arr[i]) <= parameter(arr[j]) && ascending) continue;
-                    if (parameter(arr[i]) >= parameter(arr[j]) && !ascending) continue;
-                    var temp = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = temp;
+                    if (comparator.CompareArrays(arr[i],arr[j]) <= 0) continue;
+                    Swap(ref arr[i], ref arr[j]);
                 }
             }
         }
-
-        public static int MaxParameter(int[] arr)
+        private static void Swap(ref int[] a, ref int[] b)
         {
-            return arr.Max();
-        }
+            var tmp = a;
+            a = b;
+            b = tmp;
 
-        public static int MinParameter(int[] arr)
-        {
-            return arr.Min();
         }
-
-        public static int SumParameter(int[] arr)
-        {
-            return arr.Sum();
-        }
-
     }
 }
