@@ -4,34 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task1.Tests
+namespace Task2.Tests
 {
-    class ComparatorByAscendingMax : ICustomComparator
+    class ComparatorByAscendingMax : IComparer<int[]>
     {
-        public int CompareArrays(int[] a, int[] b)
+        public int Compare(int[] a, int[] b)
         {
+            if (a == null) return int.MaxValue - b.Max();
+            if (b == null) return int.MaxValue;
             return a.Max() - b.Max();
         }
     }
 
-    class ComparatorByAscendingSum : ICustomComparator
+    class ComparatorByAscendingSum : IComparer<int[]>
     {
-        public int CompareArrays(int[] a, int[] b)
+        public int Compare(int[] a, int[] b)
         {
+            if (a == null) return int.MaxValue - b.Sum();
+            if (b == null) return int.MaxValue;
             return a.Sum() - b.Sum();
         }
     }
-    class ComparatorByDescendingMax : ICustomComparator
+    class ComparatorByDescendingMax : IComparer<int[]>
     {
-        public int CompareArrays(int[] a, int[] b)
+        public int Compare(int[] a, int[] b)
         {
+            if (a == null) return int.MinValue + b.Max();
+            if (b == null) return int.MinValue;
             return b.Max() - a.Max();
         }
     }
-    class ComparatorByDescendingSum : ICustomComparator
+    class ComparatorByDescendingSum : IComparer<int[]>
     {
-        public int CompareArrays(int[] a, int[] b)
+        public int Compare(int[] a, int[] b)
         {
+            if (a == null) return int.MinValue + b.Sum();
+            if (b == null) return int.MinValue;
             return b.Sum() - a.Sum();
         }
     }
